@@ -4,6 +4,7 @@ import { Button, EnterName, FildName, Forms } from './ContactFormStyle';
 import shortid from 'shortid';
 
 export const ContactForm = ({ contacts, onSubmit }) => {
+  console.log(contacts);
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
@@ -26,19 +27,24 @@ export const ContactForm = ({ contacts, onSubmit }) => {
   const hendleSubmit = e => {
     e.preventDefault();
     console.log(name, number);
-    //  if (contacts.find(item => item.name === name)) {
-    //    alert(`${name} is already in contacts.`);
-    //    return;
-    //  } else if (contacts.find(item => item.number === number)) {
-    //    alert(`${number} is already in contacts.`);
-    //    return;
-    //  } else if (!/\d{3}[-]\d{2}[-]\d{2}/g.test(number)) {
-    //    alert('Enter the correct number phone!');
-    //    return;
-    //  }
+    if (contacts.find(item => item.name === name)) {
+      alert(`${name} is already in contacts.`);
+      return;
+    } else if (contacts.find(item => item.number === number)) {
+      alert(`${number} is already in contacts.`);
+      return;
+    } else if (!/\d{3}[-]\d{2}[-]\d{2}/g.test(number)) {
+      alert('Enter the correct number phone!');
+      return;
+    }
 
     onSubmit(name, number, shortid.generate());
-    // resetForm();
+    resetForm();
+  };
+
+  const resetForm = () => {
+    setName('');
+    setNumber('');
   };
 
   return (

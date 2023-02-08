@@ -1,17 +1,17 @@
 import React from 'react';
-import { useState } from 'react';
+import { ContactList } from './ContcatList/ContactList';
+import { useState, useEffect } from 'react';
+import { Filter } from './Filter/Filter';
 import { ContactForm } from './ContactForm/ContactForm';
 import { Background } from './Container/Background';
 import { Box } from './Container/Box';
 
 export const App = () => {
-  //     state = {
-  //       contacts: [],
-
-  //       filter: '',
-  //     };
   const [contacts, setContacts] = useState([]);
+  const [filter, setFilter] = useState('');
   console.log(contacts);
+
+  useEffect(() => {});
 
   const hendlerFormData = (name, number, numberId) => {
     console.log(name, number, numberId); // data
@@ -23,10 +23,27 @@ export const App = () => {
     setContacts(prevContacts => {
       return [...prevContacts, addContact];
     });
-    // this.setState(prevState => ({
-    //   contacts: [addContact, ...prevState.contacts],
-    // }));
   };
+
+  const deleteContact = contactId => {
+    setContacts(prevContacts => {
+      return prevContacts.filter(item => item.id !== contactId);
+    });
+  };
+
+  const onchangeFilter = e => {
+    setFilter(e.currentTarget.value);
+    // this.setState({ filter: e.currentTarget.value });
+  };
+
+  const getFilteredContacts = () => {
+    const normaLized = filter.toLocaleLowerCase();
+    const sameName = contacts.filter(item =>
+      item.name.toLocaleLowerCase().includes(normaLized)
+    );
+    return sameName;
+  };
+
   return (
     <Background>
       <Box
@@ -38,22 +55,19 @@ export const App = () => {
         boxShadow="3px 4px 6px #888888"
       >
         <h1>Phonebook</h1>
-        <ContactForm onSubmit={hendlerFormData} />
-        {/* {this.state.contacts.length === 0 ? (
-            <h2>The phonebook is empty</h2>
-          ) : (
-            <>
-              <h2>Contacts</h2>
-              <Filter
-                onChange={this.onchangeFilter}
-                value={this.state.filter}
-              />
-              <ContactList
-                phoneContact={filteredContacts}
-                onDeleteContact={this.deleteContact}
-              />
-            </>
-          )} */}
+        <ContactForm onSubmit={hendlerFormData} contacts={contacts} />
+        {contacts.length === 0 ? (
+          <h2>The phonebook is empty</h2>
+        ) : (
+          <>
+            <h2>Contacts</h2>
+            <Filter onChange={onchangeFilter} value={filter} />
+            <ContactList
+              phoneContact={getFilteredContacts()}
+              onDeleteContact={deleteContact}
+            />
+          </>
+        )}
       </Box>
     </Background>
   );
