@@ -20,7 +20,7 @@ export const ContactForm = ({ contacts, onSubmit }) => {
         setNumber(e.currentTarget.value);
         break;
       default:
-        return console.log('не та строка');
+        return;
     }
   };
 
